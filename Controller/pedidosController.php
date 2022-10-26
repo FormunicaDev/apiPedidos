@@ -5,8 +5,8 @@ class ControllerPedidos {
   public function PostPedido($data){
 
 
-
-    if(!preg_match("/^[[:digit:]]+$/",$data["codigo"]))
+    //validar que el campo codigo sea numerico
+    if(!preg_match("/^[[:digit:]]+$/",$data["Codigo"]))
     {
 
       $json = array(
@@ -17,10 +17,10 @@ class ControllerPedidos {
       echo json_encode($json);
       return;
     }
-
-    else if(!preg_match("/^[[:digit:]]+$/",$data["total"]))
+    //validar que el campo total sea numerico
+    else if(!preg_match("/^[[:digit:]]+$/",$data["Total"]))
     {
-      
+
       $json = array(
         "error"=>"El campo total solo acepta numeros",
         "statusCode"=>"400"
@@ -29,8 +29,8 @@ class ControllerPedidos {
       echo json_encode($json);
       return;
     }
-
-    else if(!preg_match("/^[[:digit:]]+$/",$data["totalDescuento"]))
+    //validar que el campo descuento sea numerico
+    else if(!preg_match("/^[[:digit:]]+$/",$data["TotalDescuento"]))
     {
 
       $json = array(
@@ -41,9 +41,11 @@ class ControllerPedidos {
       echo json_encode($json);
       return;
     }
-
+    //si se cumplen las validaciones anteriores, se envia la data al modelo
     else {
       $pedidos=ModelPedidos::postPedidos($data);
+      echo $pedidos;
+      return;
     }
 
   }

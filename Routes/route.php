@@ -69,16 +69,18 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
             {
 
               $datos = array(
-                "codigo" => $_POST["codigo"],
+                "Codigo" => $_POST["codigo"],
                 "codVendedor" => $_POST["codVendedor"],
                 "codCliente" => $_POST["codCliente"],
                 "TipoVenta" => $_POST["tipoVenta"],
                 "Comentarios" => $_POST["comentarios"],
-                "total" => $_POST["total"],
-                "totalDescuento" => $_POST["totalDesc"],
+                "Total" => $_POST["total"],
+                "TotalDescuento" => $_POST["totalDesc"],
                 "TotalNeto" => $_POST["totalNeto"],
                 "numCheque" => $_POST["cheque"],
-                "fechaCheque" => date($_POST["fechaCheque"])
+                "fechaCheque" => $_POST["fechaCheque"],
+                "Banco"=> $_POST['Banco'],
+                "FormaPago"=>$_POST['FormaPago']
               );
 
               $pedidos->PostPedido($datos);
