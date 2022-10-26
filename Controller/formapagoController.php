@@ -1,11 +1,11 @@
 <?php
 
-class ControllerTipoVenta{
+class ControllerFormaPago {
 
-  static public function getTipoVenta(){
-    $tipoVenta = ModelTipoVenta::listarTipoVenta();
+  static public function getFormaPago(){
+    $formapago = ModelFormaPago::listarFormaPago();
 
-    if($tipoVenta == null)
+    if($formapago==null)
     {
       $data = array(
         "mensaje"=>"No existen registros en la base de datos",
@@ -18,7 +18,7 @@ class ControllerTipoVenta{
     else
     {
       $data = array(
-        "data"=>$tipoVenta,
+        "data"=>$formapago,
         "statusCode"=>200,
       );
 
@@ -28,10 +28,16 @@ class ControllerTipoVenta{
     }
   }
 
-  static public function getTipoVentaById($ID){
-    $tipoVenta = ModelTipoVenta::buscarTipoVenta($ID);
+  static public function postFormaPago($data){
+    $formapago=ModelFormaPago::registrarFormaPago($data);
+    echo $formapago;
+    return;
+  }
 
-    if($tipoVenta==null)
+  static public function getFormaPagoGetById($ID){
+    $formapago= ModelFormaPago::buscarFormaPago($ID);
+
+    if($formapago==null)
     {
       $data = array(
         "mensaje"=>"No se encontro el registro solicitado",
@@ -41,9 +47,10 @@ class ControllerTipoVenta{
       echo json_encode($data);
       return;
     }
-    else {
+    else
+    {
       $data = array(
-        "data"=>$tipoVenta,
+        "data"=>$formapago,
         "statusCode"=>200,
       );
 
@@ -51,13 +58,9 @@ class ControllerTipoVenta{
 
       return;
     }
-  }
 
-  static public function postTipoVenta($data){
-    $tipoVenta=ModelTipoVenta::registrarTipoVenta($data);
-    echo $tipoVenta;
-    return;
   }
 
 }
+
  ?>

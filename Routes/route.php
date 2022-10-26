@@ -119,8 +119,54 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
             }
           break;
         case 'formapago':
+
+          $formaPago= new ControllerFormaPago();
+
+          if($metodo == "POST")
+          {
+            $datos  = array(
+              "FormaPago"=>$_POST["FormaPago"],
+              "usuario"=>$_POST["usuario"]
+            );
+
+            $formaPago->postFormaPago($datos);
+          }
+          if($metodo == "GET")
+          {
+            if($ID != null || $ID != 0)
+            {
+              $formaPago->getFormaPagoGetById($ID);
+            }
+            else
+            {
+              $formaPago->getFormaPago();
+            }
+          }
           break;
         case 'tipoventa':
+            $tipoVenta = new ControllerTipoVenta();
+
+            if($metodo == "POST")
+            {
+              $data = array(
+                "TipoVenta" => $_POST["TipoVenta"],
+                "usuario" => $_POST["usuario"]
+              );
+
+              $tipoVenta->postTipoVenta($data);
+            }
+
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID != 0)
+              {
+                $tipoVenta->getTipoVentaById($ID);
+              }
+              else
+              {
+                $tipoVenta->getTipoVenta();
+              }
+            }
           break;
         case 'estadovisualizacion':
           break;
