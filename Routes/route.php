@@ -52,13 +52,7 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
           break;
         //endpoint vendedores
         case 'vendedores':
-            $json = array(
-              "Detalle"=>"Vista Vendedores",
-              "StatusCode"=>"200"
-            );
-            echo json_encode($json,true);
 
-            return;
           break;
         //endpoint pedidos
         case 'pedidos':
@@ -94,11 +88,35 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
               }
               else
               {
-                echo "entro";
+
               }
             }
           break;
         case 'banco':
+            $banco = new ControllerBanco();
+
+            if($metodo == "POST")
+            {
+              $datos = array(
+                "Banco"=>$_POST["Banco"],
+                "UsuarioRegistro"=>$_POST["usuario"]
+              );
+
+              $banco->postBanco($datos);
+
+            }
+
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID != 0)
+              {
+                $banco->getBancoById($ID);
+              }
+              else
+              {
+                $banco->getBanco();
+              }
+            }
           break;
         case 'formapago':
           break;
@@ -108,7 +126,13 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
           break;
         // sin llamada a un endpoint valido
         default:
+            $json = array(
+              "Detalle"=>"Ruta no existente",
+              "StatusCode"=>"404"
+            );
+            echo json_encode($json,true);
 
+            return;
           break;
       }
     }
