@@ -170,6 +170,24 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
           break;
         case 'estadovisualizacion':
           break;
+        case 'vendedor':
+            $vendedor = new ControllerVendedor();
+            if($metodo == "POST")
+            {
+
+            }
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID != 0)
+              {
+                $vendedor->getVendedorById($ID);
+              }
+              else
+              {
+                $vendedor->getVendedor();
+              }
+            }
+          break;
         // sin llamada a un endpoint valido
         default:
             $json = array(
