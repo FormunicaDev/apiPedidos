@@ -1,5 +1,15 @@
 <?php
 $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
+$login = new loginController();
+$jwt = null;
+
+if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+    header('HTTP/1.0 400 Bad Request');
+    echo 'Token not found in request';
+    exit;
+}
+
+$jwt = $matches[1];
 
   if(count(array_filter($arrayRutas)) == 1) {
       $json = array(
@@ -28,6 +38,7 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
         // endpoint cliente
         case 'clientes':
             $clientes = new ControllerCliente();
+
             if ($metodo == 'POST')
             {
 
@@ -37,11 +48,26 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
               //valida si se envia un parametro despues del endpoint y si este es un ID nu
               if($ID != null || $ID != 0)
               {
-                $clientes->getById($ID);
+                if($login->validaToken($jwt))
+                {
+                    $clientes->getById($ID);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+
               }
               else
               {
+                if($login->validaToken($jwt))
+                {
                   $clientes->getClientes();
+                }
+                else {
+                  $login->validaToken($jwt);
+                }
+
               }
 
             }
@@ -186,6 +212,27 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
               {
                 $vendedor->getVendedor();
               }
+            }
+          break;
+        case 'login':
+            $login = new loginController();
+            if ($metodo == "POST") {
+              $data = array(
+                "usuario" => $_POST["usuario"],
+                "password" => $_POST["password"]
+              );
+
+              $login->iniciarSesion($data);
+            }
+
+            if ($metodo == "GET") {
+              $data = array(
+                "mensaje" => "No Data",
+                "password" => 404
+              );
+
+              echo json_encode($data);
+              return;
             }
           break;
         // sin llamada a un endpoint valido

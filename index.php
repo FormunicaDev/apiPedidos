@@ -8,12 +8,14 @@ require_once 'Controller/bancoController.php';
 require_once 'Controller/formapagoController.php';
 require_once 'Controller/tipoventaController.php';
 require_once 'Controller/vendedorController.php';
+require_once 'Controller/loginController.php';
 require_once 'Models/clienteModel.php';
 require_once 'Models/pedidosModel.php';
 require_once 'Models/bancoModel.php';
 require_once 'Models/formapagoModel.php';
 require_once 'Models/tipoventaModel.php';
 require_once 'Models/vendedorModel.php';
+require_once 'Models/loginModel.php';
 
 $rutas = new ControllerRoute();
 
