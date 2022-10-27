@@ -3,13 +3,9 @@ $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
 $login = new loginController();
 $jwt = null;
 
-if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-    header('HTTP/1.0 400 Bad Request');
-    echo 'Token not found in request';
-    exit;
+if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+    $jwt = $matches[1];
 }
-
-$jwt = $matches[1];
 
   if(count(array_filter($arrayRutas)) == 1) {
       $json = array(
@@ -45,28 +41,25 @@ $jwt = $matches[1];
             }
             if($metodo == 'GET')
             {
-              //valida si se envia un parametro despues del endpoint y si este es un ID nu
+              //valida si se envia un parametro despues del endpoint y si este es un ID
               if($ID != null || $ID != 0)
               {
-                if($login->validaToken($jwt))
-                {
-                    $clientes->getById($ID);
-                }
-                else
-                {
-                  $login->validaToken($jwt);
-                }
-
+                  if($login->validaToken($jwt))
+                  {
+                      $clientes->getById($ID);
+                  }else{
+                      $login->validaToken($jwt);
+                  }
               }
               else
               {
-                if($login->validaToken($jwt))
-                {
-                  $clientes->getClientes();
-                }
-                else {
-                  $login->validaToken($jwt);
-                }
+                  if($login->validaToken($jwt) == "ok")
+                  {
+                      $clientes->getClientes();
+                  }
+                  else{
+                      echo $login->validaToken($jwt);
+                  }
 
               }
 

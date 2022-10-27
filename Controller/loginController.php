@@ -1,6 +1,7 @@
 <?php
 require_once 'vendor/autoload.php';
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class loginController {
 
@@ -33,28 +34,52 @@ class loginController {
         'username' => $usuario
       ];
 
-      echo JWT::encode($request_data,$secretKey,"HS512");
-    }
-  }
-
-  static public function validaToken($token) {
-    $secretKey = "00e3d043e7725fa6006e634f79c770c79d30b7f2a4b86afe5188cfe7bf6250b8";
-    $jwt = JWT::decode($token,$secretKey,['HS512']);
-    $now = new DateTimeImmutable();
-    $dominio = "formunica.com";
-
-    if($jwt->iss !== $dominio || $jwt->nbf > $now->getTimestamp() || $jwt->exp < $now->getTimestamp())
-    {
       $data = array(
-        "mensaje" => "No esta autorizado",
-        "StatusCode" => 401
+        "token" => JWT::encode($request_data,$secretKey,"HS512"),
+        "user" => $data["usuario"],
+        "StatusCode" => 200
       );
 
       echo json_encode($data);
-      return;
+    }
+  }
+
+  static public function validaToken($jwt) {
+
+    if($jwt != null && $jwt != "") {
+
+      $secret_key = "00e3d043e7725fa6006e634f79c770c79d30b7f2a4b86afe5188cfe7bf6250b8";
+      $token = JWT::decode($jwt,new Key($secret_key,'HS512'));
+      $now = new DateTimeImmutable();
+      $dominio = "formunica.com";
+
+      if ($token->iss !== $dominio || $token->nbf > $now->getTimestamp() || $token->exp < $now->getTimestamp())
+      {
+
+        $data = array(
+            "mensaje" => "No esta autorizado",
+            "StatusCode" => 401
+        );
+
+        return json_encode($data);
+
+      }
+      else
+      {
+        return "ok";
+      }
+
     }
     else {
-      return 1;
+
+      $data = array(
+          "mensaje" => "No esta autorizado",
+          "StatusCode" => 401
+      );
+
+      return json_encode($data);
+
+
     }
   }
 }
