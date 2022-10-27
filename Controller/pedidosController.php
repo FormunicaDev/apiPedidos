@@ -50,5 +50,32 @@ class ControllerPedidos {
 
   }
 
+  public function getPedidos(){
+    $pedidos = ModelPedidos::listarPedidos();
+    $count = ModelPedidos::countRegPedidos();
+    if($pedidos==null)
+    {
+      $data = array(
+        "mensaje"=>"No existen registros en la base de datos",
+        "statusCode"=>404
+      );
+
+      echo json_encode($data);
+      return;
+    }
+    else
+    {
+      $data = array(
+        "data"=>$pedidos,
+        "statusCode"=>200,
+        "totalRegistros" => $count
+      );
+
+      echo json_encode($data,true);
+
+      return;
+    }
+  }
+
 }
  ?>

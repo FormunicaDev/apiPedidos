@@ -1,4 +1,11 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS, post, get');
+header("Access-Control-Max-Age", "8600");
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+header("Access-Control-Allow-Credentials", "true");
+header('Access-Control-Allow-Headers: Authorization, Content-Type, x-xsrf-token, x_csrftoken, Cache-Control, X-Requested-With');
+
 $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
 $login = new loginController();
 $jwt = null;
@@ -37,7 +44,14 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
 
             if ($metodo == 'POST')
             {
+              if($login->validaToken($jwt))
+              {
 
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
             }
             if($metodo == 'GET')
             {
@@ -80,34 +94,54 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
 
             if($metodo == "POST")
             {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $datos = array(
+                  "Codigo" => $_POST["codigo"],
+                  "codVendedor" => $_POST["codVendedor"],
+                  "codCliente" => $_POST["codCliente"],
+                  "TipoVenta" => $_POST["tipoVenta"],
+                  "Comentarios" => $_POST["comentarios"],
+                  "Total" => $_POST["total"],
+                  "TotalDescuento" => $_POST["totalDesc"],
+                  "TotalNeto" => $_POST["totalNeto"],
+                  "numCheque" => $_POST["cheque"],
+                  "fechaCheque" => $_POST["fechaCheque"],
+                  "Banco"=> $_POST['Banco'],
+                  "FormaPago"=>$_POST['FormaPago']
+                );
 
-              $datos = array(
-                "Codigo" => $_POST["codigo"],
-                "codVendedor" => $_POST["codVendedor"],
-                "codCliente" => $_POST["codCliente"],
-                "TipoVenta" => $_POST["tipoVenta"],
-                "Comentarios" => $_POST["comentarios"],
-                "Total" => $_POST["total"],
-                "TotalDescuento" => $_POST["totalDesc"],
-                "TotalNeto" => $_POST["totalNeto"],
-                "numCheque" => $_POST["cheque"],
-                "fechaCheque" => $_POST["fechaCheque"],
-                "Banco"=> $_POST['Banco'],
-                "FormaPago"=>$_POST['FormaPago']
-              );
-
-              $pedidos->PostPedido($datos);
+                $pedidos->PostPedido($datos);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
 
             }
             if($metodo == "GET")
             {
               if($ID != null || $ID != 0)
               {
+                if($login->validaToken($jwt) == "ok")
+                {
 
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
               else
               {
-
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $pedidos->getPedidos();
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
             }
           break;
@@ -116,24 +150,44 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
 
             if($metodo == "POST")
             {
-              $datos = array(
-                "Banco"=>$_POST["Banco"],
-                "UsuarioRegistro"=>$_POST["usuario"]
-              );
+              if($login->validaToken($jwt) == "ok")
+              {
+                $datos = array(
+                  "Banco"=>$_POST["Banco"],
+                  "UsuarioRegistro"=>$_POST["usuario"]
+                );
 
-              $banco->postBanco($datos);
-
+                $banco->postBanco($datos);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
             }
 
             if($metodo == "GET")
             {
               if($ID != null || $ID != 0)
               {
-                $banco->getBancoById($ID);
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $banco->getBancoById($ID);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
               else
               {
-                $banco->getBanco();
+                if($login->validaToken($jwt)=="ok")
+                {
+                  $banco->getBanco();
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
             }
           break;
@@ -154,7 +208,15 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
           {
             if($ID != null || $ID != 0)
             {
-              $formaPago->getFormaPagoGetById($ID);
+              if($login->validaToken($jwt) == "ok")
+              {
+                $formaPago->getFormaPagoGetById($ID);
+              }
+              else
+              {
+                $login->validaToken($token);
+              }
+
             }
             else
             {
@@ -179,11 +241,25 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             {
               if($ID != null || $ID != 0)
               {
-                $tipoVenta->getTipoVentaById($ID);
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $tipoVenta->getTipoVentaById($ID);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
               else
               {
-                $tipoVenta->getTipoVenta();
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $tipoVenta->getTipoVenta();
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
               }
             }
           break;
@@ -199,20 +275,51 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             {
               if($ID != null || $ID != 0)
               {
-                $vendedor->getVendedorById($ID);
+                if($tipoVenta->getTipoVenta() == "ok")
+                {
+                  $vendedor->getVendedorById($ID);
+                }
+                else
+                {
+                  $tipoVenta->getTipoVenta();
+                }
+
               }
               else
               {
-                $vendedor->getVendedor();
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $vendedor->getVendedor();
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+              }
+            }
+          break;
+        case 'productos':
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID != 0)
+              {
+
+              }
+              else
+              {
+
               }
             }
           break;
         case 'login':
             $login = new loginController();
             if ($metodo == "POST") {
+              $request_body = file_get_contents('php://input');
+              $data = json_decode($request_body,true);
+
               $data = array(
-                "usuario" => $_POST["usuario"],
-                "password" => $_POST["password"]
+                "usuario" => $data["usuario"],
+                "password" => $data["password"]
               );
 
               $login->iniciarSesion($data);
@@ -221,7 +328,7 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             if ($metodo == "GET") {
               $data = array(
                 "mensaje" => "No Data",
-                "password" => 404
+                "StatusCode" => 404
               );
 
               echo json_encode($data);

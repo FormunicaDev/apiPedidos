@@ -45,6 +45,27 @@ class ModelPedidos {
       $stmt->close();
       $stmt = null;
   }
+
+  static public function listarPedidos(){
+    $stmt = BD::conexion()->prepare("SELECT * FROM pedidos ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    $stmt->close();
+
+    $stmt=null;
+  }
+
+  static public function countRegPedidos(){
+    $stmt = BD::conexion()->prepare("SELECT count(*) FROM pedidos");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    $stmt->close();
+
+    $stmt=null;
+  }
 }
 
  ?>

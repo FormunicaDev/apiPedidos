@@ -54,6 +54,17 @@ class ModelBanco {
     $stmt=null;
   }
 
+  static public function countBancos(){
+    $stmt = BD::conexion()->prepare("SELECT count(*) FROM bancos where status = 1");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    $stmt->close();
+
+    $stmt=null;
+  }
+
 }
 
 
