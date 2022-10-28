@@ -298,17 +298,36 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
               }
             }
           break;
-        case 'productos':
+        case 'producto':
+            $productos = new ControllerProductos();
+
             if($metodo == "GET")
             {
               if($ID != null || $ID != 0)
               {
-
+                $productos->getProductosById($ID);
               }
               else
               {
-
+                $productos->getProductos();
               }
+            }
+          break;
+        case 'articulo':
+            $productos = new ControllerProductos();
+
+            if($metodo == "GET")
+            {
+                if($ID != null || $ID !=0)
+                {
+                  $productos->getArticuloExactus($ID);
+                }
+                else
+                {
+                  $data = array("mensaje" => "Codigo de Articulo no especificado","StatusCode" => 404 );
+                  echo json_encode($data);
+                  return;
+                }
             }
           break;
         case 'login':

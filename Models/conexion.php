@@ -15,14 +15,18 @@ class BD {
 
     return $conexion;
   }
+
+  static public function conexionExactus() {
+    $serverName = "10.10.0.10"; //serverName\instanceName
+    $Database = "prueba";
+    $user = "gespinoza";
+    $password = "Gdjeg1995";
+    //$connectionInfo = array( "Database"=>"honduras", "UID"=>"sa", "PWD"=>"mufn2005.","CharacterSet" => "UTF-8");
+
+    $conexion = new PDO("sqlsrv:Server=$serverName;database=$Database",$user,$password);
+    $conexion->exec("set nomes utf8");
+
+    return $conexion;
+  }
 }
-
-/*
-if( $conexion ) {
-    echo "Conexión establecida.<br />";
-}else{
-    echo "Conexión no se pudo establecer.<br />";
-    die( print_r( sqlsrv_errors(), true));
-}*/
-
 ?>
