@@ -29,7 +29,7 @@ class loginController {
     {
       $secretKey = "00e3d043e7725fa6006e634f79c770c79d30b7f2a4b86afe5188cfe7bf6250b8"; //"formunica_2022*";
       $date = new DateTimeImmutable();
-      $expire_at = $date->modify('+60 minutes')->getTimestamp();
+      $expire_at = $date->modify('+480 minutes')->getTimestamp();
       $dominio = "formunica.com";
       $usuario = $data["usuario"];
 

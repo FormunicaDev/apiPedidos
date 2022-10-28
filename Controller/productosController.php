@@ -41,7 +41,7 @@ class ControllerProductos {
         "statusCode" => 200
       );
 
-      echo json_encode($data,tue);
+      echo json_encode($data,true);
       return;
     }
   }
@@ -62,10 +62,10 @@ class ControllerProductos {
         "statusCode" => 200
       );
 
-      echo json_encode($data,tue);
+      echo json_encode($data,true);
       return;
     }
-    
+
   }
 }
 

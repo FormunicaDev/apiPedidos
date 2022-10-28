@@ -40,7 +40,7 @@ class ModelProductos {
 
   static public function buscarArticulo($codArticulo) {
     $stmt = BD::conexionExactus()->prepare("SELECT ARTICULO,DESCRIPCION,PRECIO_BASE_LOCAL,PRECIO_BASE_DOLAR
-                                        from ch.Articulo");
+                                        from ch.Articulo where ARTICULO = '$codArticulo'");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_CLASS);
