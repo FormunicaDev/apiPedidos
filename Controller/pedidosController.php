@@ -2,15 +2,15 @@
 
 class ControllerPedidos {
 
-  public function PostPedido($data){
+  public function PostPedido($data,$detalle){
 
 
     //validar que el campo codigo sea numerico
-    if(!preg_match("/^[[:digit:]]+$/",$data["Codigo"]))
+    if(!preg_match("/^[[:digit:]]+$/",$data["codigo"]))
     {
 
       $json = array(
-        "error"=>"El campo codigo solo acepta numeros",
+        "mensaje"=>"El campo codigo solo acepta numeros",
         "statusCode"=>"400"
       );
 
@@ -18,11 +18,11 @@ class ControllerPedidos {
       return;
     }
     //validar que el campo total sea numerico
-    else if(!preg_match("/^[[:digit:]]+$/",$data["Total"]))
+    else if(!preg_match("/^[[:digit:]]+$/",$data["Banco"]))
     {
 
       $json = array(
-        "error"=>"El campo total solo acepta numeros",
+        "mensaje"=>"El campo total solo acepta numeros",
         "statusCode"=>"400"
       );
 
@@ -30,11 +30,22 @@ class ControllerPedidos {
       return;
     }
     //validar que el campo descuento sea numerico
-    else if(!preg_match("/^[[:digit:]]+$/",$data["TotalDescuento"]))
+    else if(!preg_match("/^[[:digit:]]+$/",$data["TipoVenta"]))
     {
 
       $json = array(
-        "error"=>"El campo descuento solo acepta numeros",
+        "mensaje"=>"El campo descuento solo acepta numeros",
+        "statusCode"=>"400"
+      );
+
+      echo json_encode($json);
+      return;
+    }
+    else if(!preg_match("/^[[:digit:]]+$/",$data["numCheque"]))
+    {
+
+      $json = array(
+        "mensaje"=>"El campo descuento solo acepta numeros",
         "statusCode"=>"400"
       );
 
@@ -43,9 +54,12 @@ class ControllerPedidos {
     }
     //si se cumplen las validaciones anteriores, se envia la data al modelo
     else {
-      $pedidos=ModelPedidos::postPedidos($data);
+      $pedidos=ModelPedidos::crearPedidos($data,$detalle);
       echo $pedidos;
       return;
+      /*$data = array("mensaje" => "Datos Correctos" );
+      echo json_encode($data);
+      return;*/
     }
 
   }
@@ -67,8 +81,8 @@ class ControllerPedidos {
     {
       $data = array(
         "data"=>$pedidos,
-        "statusCode"=>200,
-        "totalRegistros" => $count
+        "statusCode"=>200
+        //"totalRegistros" => $count
       );
 
       echo json_encode($data,true);

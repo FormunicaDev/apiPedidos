@@ -96,22 +96,30 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             {
               if($login->validaToken($jwt) == "ok")
               {
+                $request_body = file_get_contents('php://input');
+                $data = json_decode($request_body,true);
+                //var_dump($data["detallePedido"]);
                 $datos = array(
-                  "Codigo" => $_POST["codigo"],
-                  "codVendedor" => $_POST["codVendedor"],
-                  "codCliente" => $_POST["codCliente"],
-                  "TipoVenta" => $_POST["tipoVenta"],
-                  "Comentarios" => $_POST["comentarios"],
-                  "Total" => $_POST["total"],
-                  "TotalDescuento" => $_POST["totalDesc"],
-                  "TotalNeto" => $_POST["totalNeto"],
-                  "numCheque" => $_POST["cheque"],
-                  "fechaCheque" => $_POST["fechaCheque"],
-                  "Banco"=> $_POST['Banco'],
-                  "FormaPago"=>$_POST['FormaPago']
+                  "codigo" => $data["codigo"],
+                  "codVendedor" => $data["vendedor"],
+                  "codCliente" => $data["cliente"],
+                  "TipoVenta" => $data["tipoVenta"],
+                  "Comentarios" => $data["comentarios"],
+                  "Total" => floatval($data["total"]),
+                  "TotalDescuento" => $data["totalDescuento"],
+                  "TotalNeto" => $data["totalNeto"],
+                  "numCheque" => $data["cheque"],
+                  "fechaCheque" => $data["fechaCheque"],
+                  "Banco"=> $data['banco']
+                  //"FormaPago"=>$data['formaPago']
                 );
 
-                $pedidos->PostPedido($datos);
+                $detalle = $data["detallePedido"];
+                $detalleJson = json_encode($detalle);
+                $obj = new ArrayObject($detalle);
+
+                //echo($detalle);
+                $pedidos->PostPedido($datos,$detalle);
               }
               else
               {
