@@ -5,9 +5,9 @@ require_once 'conexion.php';
 class ModelPedidos {
   static public function crearPedidos($data,$detalle){
     $stmt=BD::conexion()->prepare("INSERT INTO pedidos (Codigo,codVendedor,codCliente,TipoVenta,Estado,Banco,
-      FormaPago,Comentarios,numeroCheque,fechaCheque,Total,TotalDescuento,TotalNeto,FechaRegistro)
+      FormaPago,Comentarios,numeroCheque,fechaCheque,Total,TotalDescuento,TotalNeto,FechaRegistro,UsuarioRegistro)
       values(:Codigo, :codVendedor, :codCliente, :TipoVenta, :Estado, :Banco, :FormaPago, :Comentarios, :numeroCheque, :fechaCheque,
-      :Total, :TotalDescuento, :TotalNeto, :fechaRegistro)");
+      :Total, :TotalDescuento, :TotalNeto, :fechaRegistro, :UsuarioRegistro)");
 
       $estado = 1;
       $fecha = date('Y-m-d H:i:s');
@@ -26,6 +26,7 @@ class ModelPedidos {
       $stmt -> bindParam(":TotalDescuento",$data["TotalDescuento"],PDO::PARAM_STR);
       $stmt -> bindParam(":TotalNeto",$data["TotalNeto"],PDO::PARAM_STR);
       $stmt -> bindParam(":fechaRegistro",$fecha,PDO::PARAM_STR);
+      $stmt -> bindParam(":UsuarioRegistro",$data["UsuarioRegistro"],PDO::PARAM_STR);
 
       if($stmt->execute())
       {

@@ -110,7 +110,8 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
                   "TotalNeto" => $data["totalNeto"],
                   "numCheque" => $data["cheque"],
                   "fechaCheque" => $data["fechaCheque"],
-                  "Banco"=> $data['banco']
+                  "Banco"=> $data['banco'],
+                  "UsuarioRegistro" => $data['UsuarioRegistro']
                   //"FormaPago"=>$data['formaPago']
                 );
 
