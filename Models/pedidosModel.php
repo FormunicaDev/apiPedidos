@@ -32,8 +32,8 @@ class ModelPedidos {
         $clase = new ModelPedidos();
         $lastID=$clase->lastIdPedido($data["codCliente"],$data["Banco"],$data["TipoVenta"],$fecha);
 
-        var_dump($lastID[0]) ;
-        //$clase->detallePedido($lastID["IdPedido"],$detalle);
+
+        $clase->detallePedido($lastID[0]["IdPedido"],$detalle);
 
           $json = array(
             "mensaje"=> "Registro completado con exito",
@@ -85,7 +85,8 @@ class ModelPedidos {
       where Estado = 1 and codCliente='$cliente' and Banco = $banco and TipoVenta = $tipoVenta and FechaRegistro = '$fecha'");
       $stmt->execute();
 
-      return $stmt->fetchAll(PDO::FETCH_CLASS);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
       $stmt->close();
       $stmt=null;
   }
