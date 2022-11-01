@@ -92,5 +92,29 @@ class ControllerPedidos {
     }
   }
 
+  public function getDetallePedido($IdPedido,$cantidad,$pagina){
+    $count = ModelPedidos::countRegDetallePedidos();
+    $pagination = pagination::paginacion("detallePedido",$cantidad,$pagina,$count[0]["totalRegistros"]);
+    $detallePedidos = ModelPedidos::listarDetallePedido($IdPedido,$pagination);
+
+    if($detallePedidos == null)
+    {
+      $data = array("mensaje" => "No existen registros en la base de datos", "statusCode" => 404);
+      echo json_encode($data,true);
+      return;
+    }
+    else
+    {
+      $data = array(
+        "items" => $detallePedidos,
+        "statusCode" => 200,
+        "paginacion" => $pagination
+      );
+
+      echo json_encode($data,true);
+      return;
+    }
+  }
+
 }
  ?>

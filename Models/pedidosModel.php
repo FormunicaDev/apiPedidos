@@ -129,6 +129,32 @@ class ModelPedidos {
 
     $stmt=null;
   }
+
+  static public function countRegDetallePedidos(){
+    $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM detallePedido");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt->close();
+
+    $stmt=null;
+  }
+
+  static public function listarDetallePedido($IdPedido,$paginacion) {
+    $desde = $paginacion["desde"];
+    $hasta = $paginacion["hasta"];
+
+    $stmt = BD::conexion()->prepare("SELECT * FROM
+                                        (
+                                          SELECT ROW_NUMBER() OVER(order by IdDetallePedido) as ID, * from detallePedido where IdPedido=$IdPedido
+                                        ) detallePedido where ID between $desde and $hasta");
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+    $stmt->close();
+    $stmt=null;
+  }
 }
 
  ?>

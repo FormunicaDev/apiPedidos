@@ -149,7 +149,9 @@ else
               {
                 if($login->validaToken($jwt) == "ok")
                 {
-
+                  $cantidad = $_GET["cantidad"];
+                  $pagina = $_GET["page"];
+                  $pedidos->getDetallePedido($ID,$cantidad,$pagina);
                 }
                 else
                 {
@@ -164,6 +166,30 @@ else
                   $pagina = $_GET["page"];
 
                   $pedidos->getPedidos($cantidad,$pagina);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+              }
+            }
+          break;
+        case 'detallepedido':
+            $pedidos = new ControllerPedidos();
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID != 0)
+              {
+
+              }
+              else
+              {
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $cantidad = $_GET["cantidad"];
+                  $pagina = $_GET["page"];
+                  $IdPedido= $_GET["IdPedido"];
+                  $pedidos->getDetallePedido($IdPedido,$cantidad,$pagina);
                 }
                 else
                 {
