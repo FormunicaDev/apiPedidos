@@ -13,8 +13,8 @@ class ControllerEstadistica {
     else
     {
       $data = array(
-        "totalPedidos" => $estadistica[0]["cantidad"],
-        "statusCode" => 200
+        "total" => $estadistica[0]["cantidad"],
+        "title" => "Pedidos Ingresados"
       );
 
       echo json_encode($data,true);

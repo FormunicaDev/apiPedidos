@@ -448,7 +448,7 @@ else
               if($login->validaToken($jwt) == "ok")
               {
                 $user = $_GET["usuario"];
-                $estadistica->getEstadistica();
+                $estadistica->getEstadistica($user);
               }
               else
               {
