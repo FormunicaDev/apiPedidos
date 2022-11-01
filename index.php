@@ -18,6 +18,7 @@ require_once 'Models/tipoventaModel.php';
 require_once 'Models/vendedorModel.php';
 require_once 'Models/loginModel.php';
 require_once 'Models/productosModel.php';
+require_once 'Common/paginacion.php';
 
 $rutas = new ControllerRoute();
 

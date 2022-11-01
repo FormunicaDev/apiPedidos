@@ -92,17 +92,25 @@ class ModelPedidos {
       $stmt=null;
   }
 
-  static public function listarPedidos(){
-    $stmt = BD::conexion()->prepare("SELECT IdPedido,Codigo, FechaEmision,
+  static public function listarPedidos($paginacion){
+
+    $desde = $paginacion["desde"];
+    $hasta = $paginacion["hasta"];
+
+    $stmt = BD::conexion()->prepare("SELECT * from
+                                        (
+                                        SELECT ROW_NUMBER() OVER(order by IdPedido) as ID, IdPedido,Codigo, FechaEmision,
                                         codVendedor,codCliente, b.TipoVenta,c.Estado,d.Banco,Comentarios,numeroCheque,
-                                        fechaCheque,a.Total,a.TotalDescuento,a.TotalNeto,a.FechaRegistro
-                                        FROM pedidos a
+                                        fechaCheque,a.Total,a.TotalDescuento,a.TotalNeto,a.FechaRegistro FROM
+                                        pedidos a
                                         join TipoVenta b
                                         on a.TipoVenta = b.IdTipoVenta
                                         join EstadoVisualizacion c
                                         on a.Estado=c.IdEstadoVisualizacion
                                         join bancos d
-                                        on a.Banco=d.IdBanco ");
+                                        on a.Banco=d.IdBanco
+                                        ) pedidos
+                                        where ID between $desde and $hasta");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -113,9 +121,9 @@ class ModelPedidos {
   }
 
   static public function countRegPedidos(){
-    $stmt = BD::conexion()->prepare("SELECT count(*) FROM pedidos");
+    $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM pedidos");
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_CLASS);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $stmt->close();
 

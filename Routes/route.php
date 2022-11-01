@@ -9,9 +9,22 @@ header('Access-Control-Allow-Headers: Authorization, Content-Type, x-xsrf-token,
 $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
 $login = new loginController();
 $jwt = null;
+$cantidad = null;
+$page = null;
 
 if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
     $jwt = $matches[1];
+}
+
+if(isset($_GET["cantidad"]))
+{
+  $cantidad = $_GET["cantidad"];
+  $page = $_GET["page"];
+}
+else
+{
+  $cantidad = 0;
+  $page = 0;
 }
 
   if(count(array_filter($arrayRutas)) == 1) {
@@ -28,6 +41,8 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
 
       // parametros capturados por la ruta - endpoint y id
       $ruta = array_filter($arrayRutas)[2];
+      $ruta = explode("?",$ruta);
+      $ruta = $ruta[0];
       $ID = null;
 
       if(isset(array_filter($arrayRutas)[3])) {
@@ -145,7 +160,10 @@ if (preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
               {
                 if($login->validaToken($jwt) == "ok")
                 {
-                  $pedidos->getPedidos();
+                  $cantidad = $_GET["cantidad"];
+                  $pagina = $_GET["page"];
+
+                  $pedidos->getPedidos($cantidad,$pagina);
                 }
                 else
                 {

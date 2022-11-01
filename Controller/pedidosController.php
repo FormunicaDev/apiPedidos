@@ -1,4 +1,5 @@
 <?php
+require_once './Common/paginacion.php';
 
 class ControllerPedidos {
 
@@ -57,16 +58,16 @@ class ControllerPedidos {
       $pedidos=ModelPedidos::crearPedidos($data,$detalle);
       echo $pedidos;
       return;
-      /*$data = array("mensaje" => "Datos Correctos" );
-      echo json_encode($data);
-      return;*/
     }
 
   }
 
-  public function getPedidos(){
-    $pedidos = ModelPedidos::listarPedidos();
+  public function getPedidos($cantidad,$pagina){
+
+
     $count = ModelPedidos::countRegPedidos();
+    $pagination = pagination::paginacion("pedidos",$cantidad,$pagina,$count[0]["totalRegistros"]);
+    $pedidos = ModelPedidos::listarPedidos($pagination);
     if($pedidos==null)
     {
       $data = array(
@@ -81,8 +82,8 @@ class ControllerPedidos {
     {
       $data = array(
         "data"=>$pedidos,
-        "statusCode"=>200
-        //"totalRegistros" => $count
+        "statusCode"=>200,
+        "paginacion" => $pagination
       );
 
       echo json_encode($data,true);
