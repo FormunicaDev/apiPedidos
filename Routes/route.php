@@ -407,6 +407,55 @@ else
               return;
             }
           break;
+        case 'usuario':
+            $usuario=new ControllerUsuario();
+
+            if($metodo == "GET")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+
+                $user = $_GET["usuario"];
+                $usuario->getUsuarioByUser($user);
+              }
+              else {
+                $login->validaToken($jwt) == "ok";
+              }
+            }
+
+            if($metodo == "PUT")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $user = $_GET["usuario"];
+                $request_body = file_get_contents('php://input');
+                $datos = json_decode($request_body,true);
+                $data = array(
+                  "password" => $datos["contraseña"]
+                );
+                $usuario->putUserPass($user,$data);
+              }
+              else {
+                $login->validaToken($jwt) == "ok";
+              }
+            }
+          break;
+        case 'estadistica':
+            $estadistica = new ControllerEstadistica();
+
+            if($metodo == "GET")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $user = $_GET["usuario"];
+                $estadistica->getEstadistica();
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
+            }
+          break;
         // sin llamada a un endpoint valido
         default:
             $json = array(

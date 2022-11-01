@@ -130,8 +130,8 @@ class ModelPedidos {
     $stmt=null;
   }
 
-  static public function countRegDetallePedidos(){
-    $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM detallePedido");
+  static public function countRegDetallePedidos($IdPedido){
+    $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM detallePedido where IdPedido=$IdPedido");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -10,6 +10,8 @@ require_once 'Controller/tipoventaController.php';
 require_once 'Controller/vendedorController.php';
 require_once 'Controller/productosController.php';
 require_once 'Controller/loginController.php';
+require_once 'Controller/usuarioController.php';
+require_once 'Controller/estadisticaController.php';
 require_once 'Models/clienteModel.php';
 require_once 'Models/pedidosModel.php';
 require_once 'Models/bancoModel.php';
@@ -18,6 +20,8 @@ require_once 'Models/tipoventaModel.php';
 require_once 'Models/vendedorModel.php';
 require_once 'Models/loginModel.php';
 require_once 'Models/productosModel.php';
+require_once 'Models/usuarioModel.php';
+require_once 'Models/estadisticaModel.php';
 require_once 'Common/paginacion.php';
 
 $rutas = new ControllerRoute();

@@ -93,7 +93,7 @@ class ControllerPedidos {
   }
 
   public function getDetallePedido($IdPedido,$cantidad,$pagina){
-    $count = ModelPedidos::countRegDetallePedidos();
+    $count = ModelPedidos::countRegDetallePedidos($IdPedido);
     $pagination = pagination::paginacion("detallePedido",$cantidad,$pagina,$count[0]["totalRegistros"]);
     $detallePedidos = ModelPedidos::listarDetallePedido($IdPedido,$pagination);
 
