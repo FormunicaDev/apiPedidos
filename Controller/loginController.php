@@ -32,6 +32,7 @@ class loginController {
       $expire_at = $date->modify('+480 minutes')->getTimestamp();
       $dominio = "formunica.com";
       $usuario = $data["usuario"];
+      $role = $login[0]["IDROLE"];
 
       $request_data = [
         'iat' => $date->getTimestamp(),
@@ -44,7 +45,8 @@ class loginController {
       $data = array(
         "token" => JWT::encode($request_data,$secretKey,"HS512"),
         "user" => $data["usuario"],
-        "StatusCode" => 200
+        "StatusCode" => 200,
+        "role" => $role
       );
 
       echo json_encode($data);

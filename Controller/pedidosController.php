@@ -62,12 +62,12 @@ class ControllerPedidos {
 
   }
 
-  public function getPedidos($cantidad,$pagina){
+  public function getPedidos($user,$cantidad,$pagina){
 
 
-    $count = ModelPedidos::countRegPedidos();
+    $count = ModelPedidos::countRegPedidos($user);
     $pagination = pagination::paginacion("pedidos",$cantidad,$pagina,$count[0]["totalRegistros"]);
-    $pedidos = ModelPedidos::listarPedidos($pagination);
+    $pedidos = ModelPedidos::listarPedidos($user,$pagination);
     if($pedidos==null)
     {
       $data = array(

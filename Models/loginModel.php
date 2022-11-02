@@ -13,10 +13,13 @@ class Modellogin {
     $usuario = $data["usuario"];
     $password = $data["password"];
 
-    $stmt=BD::conexion()->prepare("SELECT * FROM USUARIO where USUARIO = '$usuario' and PASSWORD='$password' and ACTIVO = 1");
+    $stmt=BD::conexion()->prepare("SELECT a.USUARIO,a.DESCR,a.ACTIVO,a.PASSWORD,b.IDROLE
+                                    FROM USUARIO a
+                                    join USUARIO_ROLE b
+                                    on a.USUARIO=b.USUARIO where a.USUARIO = '$usuario' and a.PASSWORD='$password' and a.ACTIVO = 1 and b.IDMODULO=100");
     $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_CLASS);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->close();
     $stmt=null;
 

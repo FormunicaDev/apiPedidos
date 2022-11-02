@@ -92,25 +92,48 @@ class ModelPedidos {
       $stmt=null;
   }
 
-  static public function listarPedidos($paginacion){
+  static public function listarPedidos($user,$paginacion){
 
     $desde = $paginacion["desde"];
     $hasta = $paginacion["hasta"];
 
-    $stmt = BD::conexion()->prepare("SELECT * from
-                                        (
-                                        SELECT ROW_NUMBER() OVER(order by IdPedido) as ID, IdPedido,Codigo, FechaEmision,
-                                        codVendedor,codCliente, b.TipoVenta,c.Estado,d.Banco,Comentarios,numeroCheque,
-                                        fechaCheque,a.Total,a.TotalDescuento,a.TotalNeto,a.FechaRegistro FROM
-                                        pedidos a
-                                        join TipoVenta b
-                                        on a.TipoVenta = b.IdTipoVenta
-                                        join EstadoVisualizacion c
-                                        on a.Estado=c.IdEstadoVisualizacion
-                                        join bancos d
-                                        on a.Banco=d.IdBanco
-                                        ) pedidos
-                                        where ID between $desde and $hasta");
+    if($user == '')
+    {
+      $stmt = BD::conexion()->prepare("SELECT * from
+                                          (
+                                          SELECT ROW_NUMBER() OVER(order by IdPedido) as ID, IdPedido,Codigo, FechaEmision,
+                                          codVendedor,codCliente, b.TipoVenta,c.Estado,d.Banco,Comentarios,numeroCheque,
+                                          fechaCheque,a.Total,a.TotalDescuento,a.TotalNeto,a.FechaRegistro,a.UsuarioRegistro as usuarioAs FROM
+                                          pedidos a
+                                          join TipoVenta b
+                                          on a.TipoVenta = b.IdTipoVenta
+                                          join EstadoVisualizacion c
+                                          on a.Estado=c.IdEstadoVisualizacion
+                                          join bancos d
+                                          on a.Banco=d.IdBanco
+                                          ) pedidos
+                                          where ID between $desde and $hasta ");
+    }
+    else
+    {
+      $stmt = BD::conexion()->prepare("SELECT * from
+                                          (
+                                          SELECT ROW_NUMBER() OVER(order by IdPedido) as ID, IdPedido,Codigo, FechaEmision,
+                                          codVendedor,codCliente, b.TipoVenta,c.Estado,d.Banco,Comentarios,numeroCheque,
+                                          fechaCheque,a.Total,a.TotalDescuento,a.TotalNeto,a.FechaRegistro,a.UsuarioRegistro as usuarioAs FROM
+                                          pedidos a
+                                          join TipoVenta b
+                                          on a.TipoVenta = b.IdTipoVenta
+                                          join EstadoVisualizacion c
+                                          on a.Estado=c.IdEstadoVisualizacion
+                                          join bancos d
+                                          on a.Banco=d.IdBanco
+                                          where a.UsuarioRegistro = '$user'
+                                          ) pedidos
+                                          where ID between $desde and $hasta ");
+    }
+
+
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -120,8 +143,14 @@ class ModelPedidos {
     $stmt=null;
   }
 
-  static public function countRegPedidos(){
-    $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM pedidos");
+  static public function countRegPedidos($user){
+    if($user == '')
+    {
+      $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM pedidos");
+    }else {
+      $stmt = BD::conexion()->prepare("SELECT count(*) as totalRegistros FROM pedidos where UsuarioRegistro = '$user'");
+    }
+
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 

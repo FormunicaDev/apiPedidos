@@ -164,8 +164,13 @@ else
                 {
                   $cantidad = $_GET["cantidad"];
                   $pagina = $_GET["page"];
+                  $usuario = $_GET["user"];
+                  if($usuario==null)
+                  {
+                    $usuario = '';
+                  }
 
-                  $pedidos->getPedidos($cantidad,$pagina);
+                  $pedidos->getPedidos($usuario,$cantidad,$pagina);
                 }
                 else
                 {
