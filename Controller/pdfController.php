@@ -53,7 +53,7 @@ function Footer()
 function ImprovedTable($header,$detalles)
 {
     // Anchuras de las columnas
-    $w = array(40, 35, 45, 40,40,35);
+    $w = array(40, 35, 45, 40,35);
     // Cabeceras
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],7,$header[$i],1,0,'C');
@@ -62,12 +62,12 @@ function ImprovedTable($header,$detalles)
         $data = json_decode($detalles,true);
         foreach($data as $row)
         {
-            $this->Cell($w[0],6,'Nicaragua','LR');
-            $this->Cell($w[1],6,'Managua','LR');
-            $this->Cell($w[2],6,number_format('1000000'),'LR',0,'R');
-            $this->Cell($w[3],6,number_format('10000'),'LR',0,'R');
-            $this->Cell($w[4],6,number_format('10000'),'LR',0,'R');
-            $this->Cell($w[5],6,number_format('10000'),'LR',0,'R');
+            
+            $this->Cell($w[0],6,$row["CodProducto"],'LR');
+            $this->Cell($w[1],6,number_format($row["Cantidad"]),'LR');
+            $this->Cell($w[2],6,$row["Precio"],'LR',0,'R');
+            $this->Cell($w[3],6,$row["Descuento"],'LR',0,'R');
+            $this->Cell($w[4],6,$row["totalLemp"],'LR',0,'R');
             $this->Ln();
         }
 
@@ -92,7 +92,7 @@ class pdfPedido {
         $total = $datos[0]["Total"];
         $totalNeto = $datos[0]["TotalNeto"];
         // Títulos de las columnas
-        $header = array('Producto', 'Cantidad', 'Precio Lempiras', 'Desc.Unitario','T.Descuento','T.Lempiras');
+        $header = array('Producto', 'Cantidad', 'Precio Lempiras', 'Desc.Unitario','T.Lempiras');
         // Carga de datos
         //$data = $pdf->LoadData('paises.txt');
         $pdf->SetFont('Arial','',14);

@@ -211,7 +211,7 @@ class ModelPedidos {
     $desde = $paginacion["desde"];
     $hasta = $paginacion["hasta"];
 
-    $stmt = BD::conexion()->prepare("SELECT * from detallePedido where IdPedido=$IdPedido");
+    $stmt = BD::conexion()->prepare("SELECT *, Cantidad*Precio as totalLemp from detallePedido where IdPedido=$IdPedido");
 
     $stmt->execute();
     return json_encode($stmt->fetchAll(PDO::FETCH_CLASS));
