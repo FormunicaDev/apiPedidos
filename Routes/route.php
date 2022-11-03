@@ -5,6 +5,7 @@ header("Access-Control-Max-Age", "8600");
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header("Access-Control-Allow-Credentials", "true");
 header('Access-Control-Allow-Headers: Authorization, Content-Type, x-xsrf-token, x_csrftoken, Cache-Control, X-Requested-With');
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 $arrayRutas=explode("/",$_SERVER["REQUEST_URI"]);
 $login = new loginController();
@@ -459,6 +460,39 @@ else
               {
                 $login->validaToken($jwt);
               }
+            }
+          break;
+        case 'email':
+            $email = new ControllerEmail();
+            if($metodo == "GET")
+            {
+
+            }
+            if($metodo == "POST")
+            {
+              if($login->validaToken($jwt))
+              {
+                $request_body = file_get_contents('php://input');
+                $data = json_decode($request_body,true);
+
+                $datos = array(
+                  "email" => $data["email"],
+                  "password" => $data["password"],
+                  "usuario" => $data["usuario"]
+                );
+
+                $email->postEmailConfig($datos);
+              }
+              else {
+                $login->validaToken($jwt);
+              }
+            }
+          break;
+        case 'pdf':
+            $pdf = new PDF();
+            if($metodo == "GET")
+            {
+              //$pdf->getPDF();
             }
           break;
         // sin llamada a un endpoint valido

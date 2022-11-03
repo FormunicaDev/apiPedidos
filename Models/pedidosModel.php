@@ -38,7 +38,8 @@ class ModelPedidos {
 
           $json = array(
             "mensaje"=> "Registro completado con exito",
-            "StatusCode"=>"200"
+            "StatusCode"=>"200",
+            "pedido" => intval($lastID[0]["IdPedido"]) 
           );
 
           return json_encode($json);
