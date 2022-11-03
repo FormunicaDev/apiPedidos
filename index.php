@@ -26,7 +26,6 @@ require_once 'Models/productosModel.php';
 require_once 'Models/usuarioModel.php';
 require_once 'Models/estadisticaModel.php';
 require_once 'Models/emailModel.php';
-require_once 'Models/pdfModel.php';
 require_once 'Common/paginacion.php';
 
 $rutas = new ControllerRoute();

@@ -7,6 +7,7 @@ date_default_timezone_set('UTC');
 setlocale(LC_ALL, 'es_NI');
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
+
 require 'vendor/autoload.php';
 require('vendor/setasign/fpdf/fpdf.php');
 
@@ -49,7 +50,7 @@ function Footer()
 }
 
 // Una tabla más completa
-function ImprovedTable($header)
+function ImprovedTable($header,$detalles)
 {
     // Anchuras de las columnas
     $w = array(40, 35, 45, 40,40,35);
@@ -58,13 +59,17 @@ function ImprovedTable($header)
         $this->Cell($w[$i],7,$header[$i],1,0,'C');
     $this->Ln();
     // Datos
-        $this->Cell($w[0],6,'Nicaragua','LR');
-        $this->Cell($w[1],6,'Managua','LR');
-        $this->Cell($w[2],6,number_format('1000000'),'LR',0,'R');
-        $this->Cell($w[3],6,number_format('10000'),'LR',0,'R');
-        $this->Cell($w[4],6,number_format('10000'),'LR',0,'R');
-        $this->Cell($w[5],6,number_format('10000'),'LR',0,'R');
-        $this->Ln();
+        $data = json_decode($detalles,true);
+        foreach($data as $row)
+        {
+            $this->Cell($w[0],6,'Nicaragua','LR');
+            $this->Cell($w[1],6,'Managua','LR');
+            $this->Cell($w[2],6,number_format('1000000'),'LR',0,'R');
+            $this->Cell($w[3],6,number_format('10000'),'LR',0,'R');
+            $this->Cell($w[4],6,number_format('10000'),'LR',0,'R');
+            $this->Cell($w[5],6,number_format('10000'),'LR',0,'R');
+            $this->Ln();
+        }
 
     // Línea de cierre
     $this->Cell(array_sum($w),0,'','T');
@@ -74,10 +79,18 @@ function ImprovedTable($header)
 }
 
 class pdfPedido {
-    static public function generatePDF($IdPedido) {
+    public function generatePDF($IdPedido,$data,$detail) {
         $pdf = new PDF();
 
-
+        $datos = json_decode($data,true); 
+        $cliente = $datos[0]["cliente"];
+        $FechaEmision = $datos[0]["FechaEmision"];
+        $vendedor = $datos[0]["vendedor"];
+        $direccion = $datos[0]["direccion"];
+        $celular = $datos[0]["celular"];
+        $TotalDescuento = $datos[0]["TotalDescuento"];
+        $total = $datos[0]["Total"];
+        $totalNeto = $datos[0]["TotalNeto"];
         // Títulos de las columnas
         $header = array('Producto', 'Cantidad', 'Precio Lempiras', 'Desc.Unitario','T.Descuento','T.Lempiras');
         // Carga de datos
@@ -85,20 +98,21 @@ class pdfPedido {
         $pdf->SetFont('Arial','',14);
         $pdf->AddPage();
         $pdf->Cell(0,10,'N# Orden de Pedido: '.$IdPedido ,0,1);
-        $pdf->Cell(0,10,'Cliente: ',0,1);
-        $pdf->Cell(0,10,'Fecha: ',0,1);
-        $pdf->Cell(0,10,'Vendedor: ',0,1);
-        $pdf->Cell(0,10,'Direccion de entrega: ',0,1);
-        $pdf->Cell(0,10,'Contacto: ',0,1);
-        $pdf->ImprovedTable($header);
+        $pdf->Cell(0,10,'Cliente: '.$cliente,0,1);
+        $pdf->Cell(0,10,'Fecha: '.$FechaEmision,0,1);
+        $pdf->Cell(0,10,'Vendedor: '.$vendedor,0,1);
+        $pdf->Cell(0,10,'Direccion de entrega: '.$direccion,0,1);
+        $pdf->Cell(0,10,'Contacto: '.$celular,0,1);
+        $pdf->Cell(0,10,' ',0,1);
+        $pdf->ImprovedTable($header,$detail);
         $pdf->Cell(0,10,' ',0,1);
         $pdf->Cell(0,10,' ',0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total Descuento: ',0,1);
+        $pdf->Cell(0,10,'Total Descuento: '.$TotalDescuento,0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total Lempiras: ',0,1);
+        $pdf->Cell(0,10,'Total Lempiras: '.$total,0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total: ',0,1);
+        $pdf->Cell(0,10,'Total: '.$totalNeto,0,1);
         $fecha = date('Y-m-d H:i:s');
         $nameFile = "pedido ".$IdPedido.".pdf";
         $pdf->Output("./files/".$nameFile,"F");

@@ -5,7 +5,7 @@ class ControllerPedidos {
 
   public function PostPedido($data,$detalle){
 
-
+    $datosPedido = $data;
     //validar que el campo codigo sea numerico
     if(!preg_match("/^[[:digit:]]+$/",$data["codigo"]))
     {
@@ -55,11 +55,15 @@ class ControllerPedidos {
     }
     //si se cumplen las validaciones anteriores, se envia la data al modelo
     else {
+      
       $pedidos=ModelPedidos::crearPedidos($data,$detalle);
+      
       $array = json_decode($pedidos,true);
       $email = new ControllerEmail();
-    
-      $pdf = pdfPedido::generatePDF($array["pedido"]);
+      
+      $infoPedido = ModelPedidos::obtenerPedido($array["pedido"]);
+      $detailsPedido = ModelPedidos::obtenerDetalles($array["pedido"]);
+      $pdf = pdfPedido::generatePDF($array["pedido"],$infoPedido,$detailsPedido);
 
       $email -> sendEmail($data["UsuarioRegistro"],$pdf);
       echo $pedidos;

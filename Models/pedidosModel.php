@@ -185,6 +185,40 @@ class ModelPedidos {
     $stmt->close();
     $stmt=null;
   }
+
+  static public function obtenerPedido($IdPedido) {
+    $ID=intval($IdPedido);
+    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, b.nombres+' '+b.apellidos as cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
+    b.direccion,b.celular,a.TotalDescuento,a.TotalNeto,a.Total
+    from pedidos a
+    join clientes b
+    on a.codCliente = b.cod_cte
+    join vendedores c
+    on a.codVendedor = c.cod_vend
+    where IdPedido =$ID");
+
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_CLASS);
+    $result = json_encode($result);
+    return $result;
+    
+    $stmt->close();
+
+    $stmt=null;
+  }
+  static public function obtenerDetalles($IdPedido) {
+    $desde = $paginacion["desde"];
+    $hasta = $paginacion["hasta"];
+
+    $stmt = BD::conexion()->prepare("SELECT * from detallePedido where IdPedido=$IdPedido");
+
+    $stmt->execute();
+    return json_encode($stmt->fetchAll(PDO::FETCH_CLASS));
+
+    $stmt->close();
+    $stmt=null;
+  }
 }
 
  ?>
