@@ -11,6 +11,7 @@ class ControllerEmail {
 
   public function sendEmail($usuario,$filename) {
     $emailConfig = ModelEmail::getConfigEmail();
+    $emailList = ModelEmail::obtenerEmailActivos();
     if($emailConfig == null)
     {
       $data = array("mensaje" => "No existe una configuracion de correo para la aplicacion","statusCode" => 401 );
@@ -32,24 +33,30 @@ class ControllerEmail {
           $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
           //Recipients
-          $mail->setFrom('gespinoza@formunica.com', 'Tomador de Pedidos');
-          $mail->addAddress('gabrieljeg95@gmail.com, fpicado@formunica.com', 'Gabriel EG');     //Add a recipient
-          //$mail->addAddress('');               //Name is optional
-          $mail->addReplyTo('info@example.com', 'Information');
-          $mail->addCC('gabrieljeg2009@hotmail.com');
-          //$mail->addBCC('bcc@example.com');
+          $mail->setFrom($emailConfig[0]["email"], 'Tomador de Pedidos');
 
-          //Attachments
-          $mail->addAttachment('files/Logo.png');         //Add attachments
-          $mail->addAttachment('files/'.$filename, 'pedido');    //Optional name
+          foreach($emailList as $lista) {
+            $value = $lista["Email"];
 
-          //Content
-          $mail->isHTML(true);                                  //Set email format to HTML
-          $mail->Subject = 'Formunica-Tomador de Pedidos Honduras';
-          $mail->Body    = template::getTemplate($usuario); //'This is the HTML message body <b>in bold!</b>';
-          $mail->AltBody = 'Este correo a sido generado por sistema';
+            $mail->addAddress($value, 'Formunica');     //Add a recipient
+            //$mail->addAddress('');               //Name is optional
+            $mail->addReplyTo('controladorver@formunica.com', 'Information');
+            $mail->addCC('gabrieljeg2009@hotmail.com');
+            //$mail->addBCC('bcc@example.com');
 
-          $mail->send();
+            //Attachments
+            $mail->addAttachment('files/Logo.png');         //Add attachments
+            $mail->addAttachment('files/'.$filename, 'pedido');    //Optional name
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Formunica-Tomador de Pedidos Honduras';
+            $mail->Body    = template::getTemplate($usuario); //'This is the HTML message body <b>in bold!</b>';
+            $mail->AltBody = 'Este correo a sido generado por sistema';
+
+            $mail->send();
+          }
+
       } catch (\Exception $e) {
       }
     }

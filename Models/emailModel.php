@@ -98,7 +98,7 @@ class ModelEmail {
   }
 
   static public function obtenerEmailActivos() {
-    $stmt = BD::conexion()->prepare("SELECT * FROM listaEmail where status = 1");
+    $stmt = BD::conexion()->prepare("SELECT Email FROM listaEmail where status = 1");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt ->close();

@@ -55,17 +55,18 @@ class ControllerPedidos {
     }
     //si se cumplen las validaciones anteriores, se envia la data al modelo
     else {
-      
+
       $pedidos=ModelPedidos::crearPedidos($data,$detalle);
-      
+
       $array = json_decode($pedidos,true);
       $email = new ControllerEmail();
-      
+
       $infoPedido = ModelPedidos::obtenerPedido($array["pedido"]);
       $detailsPedido = ModelPedidos::obtenerDetalles($array["pedido"]);
       $pdf = pdfPedido::generatePDF($array["pedido"],$infoPedido,$detailsPedido);
 
       $email -> sendEmail($data["UsuarioRegistro"],$pdf);
+      
       echo $pedidos;
       return;
     }
