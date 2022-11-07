@@ -120,7 +120,7 @@ else
                   "fechaCheque" => $data["fechaCheque"],
                   "Banco"=> $data['banco'],
                   "UsuarioRegistro" => $data['UsuarioRegistro']
-                  //"FormaPago"=>$data['formaPago']
+                  "FormaPago"=>$data['formaPago']
                 );
 
                 $detalle = $data["detallePedido"];
@@ -599,6 +599,19 @@ else
               {
                 $IdEmail = $_GET["IdEmail"];
                 $email->deleteListEmailById($IdEmail);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
+            }
+
+            if($metodo == "PUT")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $IdEmail = $_GET["IdEmail"];
+                $email->putEmailList($IdEmail);
               }
               else
               {

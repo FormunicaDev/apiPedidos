@@ -46,7 +46,7 @@ class ControllerEmail {
 
             //Attachments
             $mail->addAttachment('files/Logo.png');         //Add attachments
-            $mail->addAttachment('files/'.$filename, 'pedido');    //Optional name
+            $mail->addAttachment('files/'.$filename, 'pedido.pdf');    //Optional name
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
@@ -112,6 +112,12 @@ class ControllerEmail {
 
   public function deleteListEmailById($IdEmail) {
     $email = ModelEmail::deleteEmail($IdEmail);
+    echo $email;
+    return;
+  }
+
+  public function putEmailList($IdEmail) {
+    $email = ModelEmail::reactiveEmail($IdEmail);
     echo $email;
     return;
   }

@@ -97,6 +97,24 @@ class ModelEmail {
     $stmt = null;
   }
 
+  static public function reactiveEmail($IdEmail) {
+    $stmt = BD::conexion()->prepare("UPDATE listaEmail set status = 1 where IdEmail = $IdEmail");
+
+    if($stmt -> execute())
+    {
+      $data = array("mensaje" =>  "Correo activado con exito", "statusCode" => 200);
+      return json_encode($data);
+    }
+    else
+    {
+      $data = array("mensaje" => "Error al reactivar correo", "statusCode" => 401);
+      return json_encode($data);
+    }
+
+    $stmt->close();
+    $stmt = null;
+  }
+
   static public function obtenerEmailActivos() {
     $stmt = BD::conexion()->prepare("SELECT Email FROM listaEmail where status = 1");
     $stmt->execute();
