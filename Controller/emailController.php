@@ -33,7 +33,7 @@ class ControllerEmail {
 
           //Recipients
           $mail->setFrom('gespinoza@formunica.com', 'Tomador de Pedidos');
-          $mail->addAddress('gabrieljeg95@gmail.com', 'Gabriel EG');     //Add a recipient
+          $mail->addAddress('gabrieljeg95@gmail.com, fpicado@formunica.com', 'Gabriel EG');     //Add a recipient
           //$mail->addAddress('');               //Name is optional
           $mail->addReplyTo('info@example.com', 'Information');
           $mail->addCC('gabrieljeg2009@hotmail.com');
@@ -73,6 +73,40 @@ class ControllerEmail {
       return;
     }
 
+  }
+
+  public function getEmailLista(){
+    $email = ModelEmail::getListEmail();
+
+    if($email==null)
+    {
+      $data = array("mensaje" => "No existen registros en la base de datos", "statusCode" => 401);
+
+      echo json_encode($data,true);
+      return;
+    }
+    else
+    {
+      $data = array(
+        "items" => $email,
+        "statusCode" => 200
+      );
+
+      echo json_encode($data,true);
+      return;
+    }
+  }
+
+  public function postEmailLista($data){
+    $email = ModelEmail::postListEmail($data);
+    echo $email;
+    return;
+  }
+
+  public function deleteListEmailById($IdEmail) {
+    $email = ModelEmail::deleteEmail($IdEmail);
+    echo $email;
+    return;
   }
 }
 

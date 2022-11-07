@@ -15,6 +15,7 @@ require_once 'Controller/usuarioController.php';
 require_once 'Controller/estadisticaController.php';
 require_once 'Controller/emailController.php';
 require_once 'Controller/pdfController.php';
+require_once 'Controller/configController.php';
 require_once 'Models/clienteModel.php';
 require_once 'Models/pedidosModel.php';
 require_once 'Models/bancoModel.php';
@@ -26,6 +27,7 @@ require_once 'Models/productosModel.php';
 require_once 'Models/usuarioModel.php';
 require_once 'Models/estadisticaModel.php';
 require_once 'Models/emailModel.php';
+require_once 'Models/configModel.php';
 require_once 'Common/paginacion.php';
 
 $rutas = new ControllerRoute();

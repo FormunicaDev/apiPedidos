@@ -95,14 +95,6 @@ else
 
             }
           break;
-        //endpoint productos
-        case 'productos':
-
-          break;
-        //endpoint vendedores
-        case 'vendedores':
-
-          break;
         //endpoint pedidos
         case 'pedidos':
 
@@ -493,6 +485,125 @@ else
             if($metodo == "GET")
             {
               //$pdf->getPDF();
+            }
+          break;
+        case 'config':
+            $config = new ControllerConfig();
+            if($metodo == "GET")
+            {
+                if($ID != null || $ID !=0)
+                {
+                  if($login->validaToken($jwt) == "ok")
+                  {
+
+                  }
+                  else
+                  {
+                    $login->validaToken($jwt);
+                  }
+                }
+                else
+                {
+                  if($login->validaToken($jwt) == "ok")
+                  {
+                    $config->getConfig();
+                  }
+                  else {
+                    $login->validaToken($jwt);
+                  }
+                }
+            }
+            if($metodo == "POST")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $request_body = file_get_contents('php://input');
+                $datos = json_decode($request_body,true);
+
+                $data = array(
+                  "email" => $datos["email"],
+                  "password" => $datos["password"],
+                  "usuario" => $datos["usuario"]
+                );
+
+                $config->postConfig($data);
+              }
+            }
+            if($metodo == "DELETE")
+            {
+              if($login->validaToken($jwt))
+              {
+                $IdConfig=$_GET["IdConfig"];
+                $usuario=$_GET["usuario"];
+                $config->deleteConfig($IdConfig,$usuario);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
+            }
+          break;
+        case 'listaemail':
+            $email = new ControllerEmail();
+
+            if($metodo == "GET")
+            {
+              if($ID != null || $ID !=0)
+              {
+                if($login->validaToken($jwt) == "ok")
+                {
+
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+              }
+              else
+              {
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $email->getEmailLista();
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+              }
+            }
+
+            if($metodo == "POST")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+
+                $request_body = file_get_contents('php://input');
+                $datos = json_decode($request_body,true);
+
+                $data = array(
+                  "email" => $datos["email"],
+                  "usuario" => $datos["usuario"]
+                );
+
+                $email->postEmailLista($data);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
+            }
+
+            if($metodo == "DELETE")
+            {
+              if($login->validaToken($jwt) == "ok")
+              {
+                $IdEmail = $_GET["IdEmail"];
+                $email->deleteListEmailById($IdEmail);
+              }
+              else
+              {
+                $login->validaToken($jwt);
+              }
             }
           break;
         // sin llamada a un endpoint valido
