@@ -4,7 +4,7 @@ require_once "conexion.php";
 class ModelCliente {
   static public function getCliente(){
     
-    $stmt = BD::conexion()->prepare("SELECT * FROM clientes");
+    $stmt = BD::conexionExactus()->prepare("SELECT * FROM ch.cliente");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -17,7 +17,7 @@ class ModelCliente {
 
   static public function getClienteById($codCliente) {
 
-    $stmt = BD::conexion()->prepare("SELECT * FROM clientes where cod_cte = '$codCliente'");
+    $stmt = BD::conexionExactus()->prepare("SELECT * FROM ch.cliente where CLIENTE = '$codCliente'");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_CLASS);

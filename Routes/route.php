@@ -119,7 +119,7 @@ else
                   "numCheque" => $data["cheque"],
                   "fechaCheque" => $data["fechaCheque"],
                   "Banco"=> $data['banco'],
-                  "UsuarioRegistro" => $data['UsuarioRegistro']
+                  "UsuarioRegistro" => $data['UsuarioRegistro'],
                   "FormaPago"=>$data['formaPago']
                 );
 
