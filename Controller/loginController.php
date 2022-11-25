@@ -14,7 +14,6 @@ class loginController {
 
   static public function iniciarSesion($data) {
     $login=Modellogin::login($data);
-
     if($login==null)
     {
       $data = array(
@@ -42,14 +41,14 @@ class loginController {
         'username' => $usuario
       ];
 
-      $data = array(
+      $datas = array(
         "token" => JWT::encode($request_data,$secretKey,"HS512"),
         "user" => $data["usuario"],
         "StatusCode" => 200,
         "role" => $role
       );
 
-      echo json_encode($data);
+      echo json_encode($datas);
     }
   }
 

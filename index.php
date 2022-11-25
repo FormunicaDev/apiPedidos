@@ -30,6 +30,9 @@ require_once 'Models/emailModel.php';
 require_once 'Models/configModel.php';
 require_once 'Common/paginacion.php';
 
+require_once 'Models/usuarioVendedor.php';
+require_once 'Controller/usuarioVendedorController.php';
+
 $rutas = new ControllerRoute();
 
 $rutas->inicio();

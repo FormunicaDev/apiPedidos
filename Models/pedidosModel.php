@@ -176,7 +176,11 @@ class ModelPedidos {
 
     $stmt = BD::conexion()->prepare("SELECT * FROM
                                         (
-                                          SELECT ROW_NUMBER() OVER(order by IdDetallePedido) as ID, * from detallePedido where IdPedido=$IdPedido
+                                          SELECT ROW_NUMBER() OVER(order by a.IdDetallePedido) as ID, a.*,b.DESCRIPCION
+                                          from detallePedido a
+                                          join  [ALFA].[EXACTUS].[CH].[ARTICULO] b
+                                          on a.CodProducto=b.Articulo
+                                          where a.IdPedido=$IdPedido
                                         ) detallePedido where ID between $desde and $hasta");
 
     $stmt->execute();
@@ -219,6 +223,17 @@ class ModelPedidos {
     $stmt->execute();
     return json_encode($stmt->fetchAll(PDO::FETCH_CLASS));
 
+    $stmt->close();
+    $stmt=null;
+  }
+
+  static public function anularPedido($IdPedido) {
+    $stmt = BD::conexion()->prepare("UPDATE pedidos set Estado = 2 where IdPedido = $IdPedido");
+    $stmt->execute();
+
+    $data = array('mensaje' => "Pedido anulado con exito", 'statusCode' => '200' );
+
+    return json_encode($data,true);
     $stmt->close();
     $stmt=null;
   }

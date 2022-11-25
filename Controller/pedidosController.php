@@ -127,5 +127,12 @@ class ControllerPedidos {
     }
   }
 
+  public function deletePedido($IdPedido){
+    $pedido = ModelPedidos::anularPedido($IdPedido);
+
+    echo $pedido;
+    return;
+  }
+
 }
  ?>

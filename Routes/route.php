@@ -171,6 +171,18 @@ else
                 }
               }
             }
+
+            if($metodo == "DELETE")
+            {
+              if($login->validaToken($jwt) == "ok")
+                {
+                  $pedidos->deletePedido($ID);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+            }
           break;
         case 'detallepedido':
             $pedidos = new ControllerPedidos();
@@ -619,6 +631,21 @@ else
               }
             }
           break;
+          case 'uservendedor':
+              $usarioVendedor = new ControllerUsuarioVendedor();
+              if($metodo == "GET") 
+              {
+                if($login->validaToken($jwt) == "ok")
+                {
+                  $user = $_GET["user"];
+                  $usarioVendedor->getVendedorByUser($user);
+                }
+                else
+                {
+                  $login->validaToken($jwt);
+                }
+              }
+            break;
         // sin llamada a un endpoint valido
         default:
             $json = array(
