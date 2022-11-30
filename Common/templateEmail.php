@@ -2,6 +2,7 @@
 class template {
   static public function getTemplate($usuario) {
     $fecha = date('Y-m-d H:i:s');
+    $logo = 'files/Logo.png';
     return $body = " <!doctype html>
      <html>
        <head>
@@ -118,6 +119,7 @@ class template {
                        <table role='presentation' border='0' cellpadding='0' cellspacing='0' style='border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;' width='100%'>
                          <tr>
                            <td style='font-family: sans-serif; font-size: 14px; vertical-align: top;' valign='top'>
+                            <img src='".$logo."' width='295' height='105'>
                              <p style='font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;'>FORMUNICA</p>
                              <p style='font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;'>Nuevo Pedido Ingresado por ".$usuario." a las ".$fecha."</p>
                              <table role='presentation' border='0' cellpadding='0' cellspacing='0' class='btn btn-primary' style='border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;' width='100%'>

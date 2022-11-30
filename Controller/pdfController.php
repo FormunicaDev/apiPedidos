@@ -53,7 +53,7 @@ function Footer()
 function ImprovedTable($header,$detalles)
 {
     // Anchuras de las columnas
-    $w = array(80, 35, 30, 40,35);
+    $w = array(80, 28, 25, 30,25);
     // Cabeceras
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],7,$header[$i],1,0,'C');
@@ -63,11 +63,11 @@ function ImprovedTable($header,$detalles)
         foreach($data as $row)
         {
             $this->SetFont('Arial', 'B', 10);
-            $this->Cell($w[0],6,$row["DESCRIPCION"]."-".$row["CodProducto"],'LR');
+            $this->Cell($w[0],6,utf8_decode($row["DESCRIPCION"]),'LR');
             $this->Cell($w[1],6,number_format($row["Cantidad"]),'LR');
-            $this->Cell($w[2],6,$row["Precio"],'LR',0,'R');
-            $this->Cell($w[3],6,$row["Descuento"],'LR',0,'R');
-            $this->Cell($w[4],6,$row["totalLemp"],'LR',0,'R');
+            $this->Cell($w[2],6,number_format($row["Precio"]),'LR',0,'R');
+            $this->Cell($w[3],6,number_format($row["Descuento"]),'LR',0,'R');
+            $this->Cell($w[4],6,number_format($row["totalLemp"]),'LR',0,'R');
             $this->Ln();
         }
 
@@ -85,17 +85,17 @@ class pdfPedido {
         $datos = json_decode($data,true); 
         $cliente = $datos[0]["cliente"];
         $FechaEmision = $datos[0]["FechaEmision"];
-        $vendedor = $datos[0]["vendedor"];
-        $direccion = $datos[0]["direccion"];
-        $celular = $datos[0]["celular"];
+        $vendedor = utf8_decode($datos[0]["vendedor"]);
+        $direccion = utf8_decode($datos[0]["direccion"]);
+        $celular = $datos[0]["TELEFONO1"];
         $TotalDescuento = $datos[0]["TotalDescuento"];
         $total = $datos[0]["Total"];
         $totalNeto = $datos[0]["TotalNeto"];
         // Títulos de las columnas
-        $header = array('Producto', 'Cantidad', 'P.(HLN)', 'Desc.Unit','T.(HLN)');
+        $header = array('Producto', 'Cantidad', 'P.(HNL)', 'Desc.Unit','T.(HNL)');
         // Carga de datos
         //$data = $pdf->LoadData('paises.txt');
-        $pdf->SetFont('Arial','',14);
+        $pdf->SetFont('Arial','',11);
         $pdf->AddPage();
         $pdf->Cell(0,10,'N# Orden de Pedido: '.$IdPedido ,0,1);
         $pdf->Cell(0,10,'Cliente: '.$cliente,0,1);
@@ -108,11 +108,11 @@ class pdfPedido {
         $pdf->Cell(0,10,' ',0,1);
         $pdf->Cell(0,10,' ',0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total Descuento: '.$TotalDescuento,0,1);
+        $pdf->Cell(0,10,'Total Descuento: '.number_format($TotalDescuento),0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total Lempiras: '.$total,0,1);
+        $pdf->Cell(0,10,'Total Lempiras: '.number_format($total),0,1);
         $pdf->setX(110);
-        $pdf->Cell(0,10,'Total: '.$totalNeto,0,1);
+        $pdf->Cell(0,10,'Total: '.number_format($totalNeto),0,1);
         $fecha = date('Y-m-d H:i:s');
         $nameFile = "pedido ".$IdPedido.".pdf";
         $pdf->Output("./files/".$nameFile,"F");

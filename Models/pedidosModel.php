@@ -180,7 +180,7 @@ class ModelPedidos {
                                           from detallePedido a
                                           join  [ALFA].[EXACTUS].[CH].[ARTICULO] b
                                           on a.CodProducto=b.Articulo
-                                          where a.IdPedido=$IdPedido
+                                          where a.IdPedido=$IdPedido and status = 1
                                         ) detallePedido where ID between $desde and $hasta");
 
     $stmt->execute();
@@ -192,11 +192,11 @@ class ModelPedidos {
 
   static public function obtenerPedido($IdPedido) {
     $ID=intval($IdPedido);
-    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, b.nombres+' '+b.apellidos as cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
-    b.direccion,b.celular,a.TotalDescuento,a.TotalNeto,a.Total
+    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, b.NOMBRE cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
+    b.direccion,b.TELEFONO1,a.TotalDescuento,a.TotalNeto,a.Total
     from pedidos a
-    join clientes b
-    on a.codCliente = b.cod_cte
+    join [ALFA].[EXACTUS].[CH].[cliente] b
+    on a.codCliente = b.CLIENTE
     join vendedores c
     on a.codVendedor = c.cod_vend
     where IdPedido =$ID");
@@ -232,6 +232,17 @@ class ModelPedidos {
     $stmt->execute();
 
     $data = array('mensaje' => "Pedido anulado con exito", 'statusCode' => '200' );
+
+    return json_encode($data,true);
+    $stmt->close();
+    $stmt=null;
+  }
+
+  static public function anularDetallePedido($IdDetallePedido) {
+    $stmt = BD::conexion()->prepare("UPDATE detallePedido set status = 0 where IdDetallePedido = $IdDetallePedido");
+    $stmt->execute();
+
+    $data =  array('mensaje' => 'Producto eliminado con exito','statusCode' => 200 );
 
     return json_encode($data,true);
     $stmt->close();

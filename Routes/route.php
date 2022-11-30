@@ -207,6 +207,14 @@ else
                 }
               }
             }
+
+            if($metodo = "DELETE")
+            {
+              if($ID != null || $ID != 0)
+              {
+                $pedidos->deleteDetallePedido($ID);
+              }
+            }
           break;
         case 'banco':
             $banco = new ControllerBanco();

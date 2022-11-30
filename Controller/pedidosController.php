@@ -64,8 +64,11 @@ class ControllerPedidos {
       $infoPedido = ModelPedidos::obtenerPedido($array["pedido"]);
       $detailsPedido = ModelPedidos::obtenerDetalles($array["pedido"]);
       $pdf = pdfPedido::generatePDF($array["pedido"],$infoPedido,$detailsPedido);
-
+      $emailUser = ModelusuarioVendedor::getUsuarioVendedorAssoc($data["UsuarioRegistro"]);
       $email -> sendEmail($data["UsuarioRegistro"],$pdf);
+      $correoVendedor = $emailUser[0]["Email"];
+
+      $email -> sendEmailByUser($data["UsuarioRegistro"],$correoVendedor,$pdf);
       
       echo $pedidos;
       return;
@@ -131,6 +134,12 @@ class ControllerPedidos {
     $pedido = ModelPedidos::anularPedido($IdPedido);
 
     echo $pedido;
+    return;
+  }
+
+  public function deleteDetallePedido($IdDetallePedido) {
+    $detallePedido = ModelPedidos::anularDetallePedido($IdDetallePedido);
+    echo $detallePedido;
     return;
   }
 
