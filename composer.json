@@ -3,6 +3,7 @@
         "firebase/php-jwt": "^6.3",
         "setasign/fpdf": "1.8",
         "phpmailer/phpmailer": "^6.6",
-        "phpoffice/phpspreadsheet": "^1.25"
+        "phpoffice/phpspreadsheet": "^1.28",
+        "phpoffice/phpexcel": "^1.8"
     }
 }

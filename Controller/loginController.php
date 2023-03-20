@@ -32,6 +32,7 @@ class loginController {
       $dominio = "formunica.com";
       $usuario = $data["usuario"];
       $role = $login[0]["IDROLE"];
+      $cod_vend = ModelusuarioVendedor::getUsuarioVendedorAssoc($data["usuario"]);
 
       $request_data = [
         'iat' => $date->getTimestamp(),
@@ -45,7 +46,8 @@ class loginController {
         "token" => JWT::encode($request_data,$secretKey,"HS512"),
         "user" => $data["usuario"],
         "StatusCode" => 200,
-        "role" => $role
+        "role" => $role,
+        "cod_vend" => $cod_vend[0]["cod_vend"]
       );
 
       echo json_encode($datas);

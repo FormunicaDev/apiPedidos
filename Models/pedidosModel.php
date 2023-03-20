@@ -184,15 +184,39 @@ class ModelPedidos {
                                         ) detallePedido where ID between $desde and $hasta");
 
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_CLASS);
+    $result = $stmt->fetchAll(PDO::FETCH_CLASS);
+   
+    //var_dump($result);
+    return $result;
+    $stmt->close();
+    $stmt=null;
+  }
 
+  static public function listarDetallePedidoAssoc($IdPedido,$paginacion) {
+    $desde = $paginacion["desde"];
+    $hasta = $paginacion["hasta"];
+
+    $stmt = BD::conexion()->prepare("SELECT * FROM
+                                        (
+                                          SELECT ROW_NUMBER() OVER(order by a.IdDetallePedido) as ID, a.*,b.DESCRIPCION
+                                          from detallePedido a
+                                          join  [ALFA].[EXACTUS].[CH].[ARTICULO] b
+                                          on a.CodProducto=b.Articulo
+                                          where a.IdPedido=$IdPedido and status = 1
+                                        ) detallePedido where ID between $desde and $hasta");
+
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   
+    //var_dump($result);
+    return $result;
     $stmt->close();
     $stmt=null;
   }
 
   static public function obtenerPedido($IdPedido) {
     $ID=intval($IdPedido);
-    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, b.NOMBRE cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
+    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, a.codCliente, b.NOMBRE cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
     b.direccion,b.TELEFONO1,a.TotalDescuento,a.TotalNeto,a.Total
     from pedidos a
     join [ALFA].[EXACTUS].[CH].[cliente] b
@@ -211,6 +235,29 @@ class ModelPedidos {
 
     $stmt=null;
   }
+
+  static public function obtenerPedidoAssoc($IdPedido) {
+    $ID=intval($IdPedido);
+    $stmt = BD::conexion()->prepare("SELECT a.IdPedido,a.FechaEmision, a.codCliente, b.NOMBRE cliente, c.nombres+' '+c.apellidos+'-'+a.codVendedor as vendedor,
+    b.direccion,b.TELEFONO1,a.TotalDescuento,a.TotalNeto,a.Total,a.Comentarios
+    from pedidos a
+    join [ALFA].[EXACTUS].[CH].[cliente] b
+    on a.codCliente = b.CLIENTE
+    join vendedores c
+    on a.codVendedor = c.cod_vend
+    where IdPedido =$ID");
+
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //$result = json_encode($result);
+    return $result;
+    
+    $stmt->close();
+
+    $stmt=null;
+  }
+
   static public function obtenerDetalles($IdPedido) {
     $desde = $paginacion["desde"];
     $hasta = $paginacion["hasta"];

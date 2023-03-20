@@ -63,12 +63,15 @@ class ControllerPedidos {
 
       $infoPedido = ModelPedidos::obtenerPedido($array["pedido"]);
       $detailsPedido = ModelPedidos::obtenerDetalles($array["pedido"]);
-      $pdf = pdfPedido::generatePDF($array["pedido"],$infoPedido,$detailsPedido);
+      $detallePed = ModelPedidos::obtenerDetalles($array["pedido"]);
+      $pedido = ModelPedidos::obtenerPedidoAssoc($array["pedido"]);
+      $pdf = pdfPedido::generatePDF($array["pedido"],$infoPedido,$detallePed);
+      $excel = ExcelPedido::generateExcel($detailsPedido,$pedido);
       $emailUser = ModelusuarioVendedor::getUsuarioVendedorAssoc($data["UsuarioRegistro"]);
-      $email -> sendEmail($data["UsuarioRegistro"],$pdf);
+      $email -> sendEmail($data["UsuarioRegistro"],$pdf, $excel);
       $correoVendedor = $emailUser[0]["Email"];
 
-      $email -> sendEmailByUser($data["UsuarioRegistro"],$correoVendedor,$pdf);
+      //$email -> sendEmailByUser($data["UsuarioRegistro"],$correoVendedor,$pdf);
       
       echo $pedidos;
       return;

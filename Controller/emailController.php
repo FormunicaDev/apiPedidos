@@ -9,7 +9,7 @@ require './Common/templateEmail.php';
 
 class ControllerEmail {
 
-  public function sendEmail($usuario,$filename) {
+  public function sendEmail($usuario,$filename,$fileExcel) {
     $emailConfig = ModelEmail::getConfigEmail();
     $emailList = ModelEmail::obtenerEmailActivos();
     if($emailConfig == null)
@@ -38,15 +38,16 @@ class ControllerEmail {
           foreach($emailList as $lista) {
             $value = $lista["Email"];
 
-            $mail->addAddress($value, 'Formunica');     //Add a recipient
+            $mail->addAddress($value);     //Add a recipient
             //$mail->addAddress('');               //Name is optional
             $mail->addReplyTo('controladorver@formunica.com', 'Information');
             //$mail->addCC('gabrieljeg2009@hotmail.com');
             //$mail->addBCC('bcc@example.com');
 
             //Attachments
-            $mail->addAttachment('files/Logo.png');         //Add attachments
-            $mail->addAttachment('files/'.$filename, 'pedido.pdf');    //Optional name
+            //$mail->addAttachment('files/Logo.png');         //Add attachments
+            $mail->addAttachment('files/'.$filename, 'pedido.pdf');
+            $mail->addAttachment('files/'.$fileExcel, 'pedido_Excel.xlsx');    //Optional name
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
@@ -55,6 +56,8 @@ class ControllerEmail {
             $mail->AltBody = 'Este correo a sido generado por sistema';
 
             $mail->send();
+
+            $mail->clearAddresses();
           }
 
       } catch (\Exception $e) {

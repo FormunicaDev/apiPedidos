@@ -67,7 +67,7 @@ function ImprovedTable($header,$detalles)
             $this->Cell($w[1],6,number_format($row["Cantidad"]),'LR');
             $this->Cell($w[2],6,number_format($row["Precio"]),'LR',0,'R');
             $this->Cell($w[3],6,number_format($row["Descuento"]),'LR',0,'R');
-            $this->Cell($w[4],6,number_format($row["totalLemp"]),'LR',0,'R');
+            $this->Cell($w[4],6,number_format($row["totalLemp"]-$row["Descuento"]),'LR',0,'R');
             $this->Ln();
         }
 

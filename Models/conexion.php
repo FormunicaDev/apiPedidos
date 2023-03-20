@@ -20,7 +20,7 @@ class BD {
     $serverName = "10.10.0.10"; //serverName\instanceName
     $Database = "prueba";
     $user = "gespinoza";
-    $password = "Gdjeg1995";
+    $password = "Gdjeg1995!";
     //$connectionInfo = array( "Database"=>"honduras", "UID"=>"sa", "PWD"=>"mufn2005.","CharacterSet" => "UTF-8");
 
     $conexion = new PDO("sqlsrv:Server=$serverName;database=$Database",$user,$password);

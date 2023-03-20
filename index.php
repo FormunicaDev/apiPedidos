@@ -15,6 +15,7 @@ require_once 'Controller/usuarioController.php';
 require_once 'Controller/estadisticaController.php';
 require_once 'Controller/emailController.php';
 require_once 'Controller/pdfController.php';
+require_once 'Controller/excelController.php';
 require_once 'Controller/configController.php';
 require_once 'Models/clienteModel.php';
 require_once 'Models/pedidosModel.php';
